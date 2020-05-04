@@ -13,13 +13,21 @@ public class Generator implements Runnable {
 
         try {
 
-            for (int i = 1; i <= DataStore.studentsCount; i++) {
+            int i = 1;
+            while (i <= DataStore.studentsCount) {
 
-                Student student = new Student(i);
-                studentLine.put(student);
-                System.out.println("One more person, joined " + student);
+                if (studentLine.getQueue().size() != DataStore.queueLength) {
+
+                    Student student = new Student(i);
+                    synchronized(studentLine) {
+
+                        studentLine.put(student);
+                        System.out.println("One more person, joined " + student);
+                        studentLine.notifyAll();
+                    }
+                    i=i+1;
+                }
             }
-
             studentLine.setStatus(false);
             System.out.println("Group of students is all here");
 

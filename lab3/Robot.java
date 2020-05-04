@@ -22,7 +22,13 @@ public class Robot implements Runnable {
                 synchronized (studentLine) {
 
                     if (!studentLine.getStatus() && studentLine.getQueue().size() == 0)
+
                         break;
+
+                    while(studentLine.getQueue().size() == 0) {
+
+                        studentLine.wait();
+                    }
 
                     if (studentLine.peek() != null) {
 
